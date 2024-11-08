@@ -1,6 +1,6 @@
 # Password Generator
 
-Этот проект представляет собой утилиту для генерации и шифрования паролей. Она позволяет пользователям настраивать параметры паролей, такие как длина, наличие специальных символов и многое другое. Сгенерированные пароли шифруются с использованием библиотеки cryptography.fernet и сохраняются в файл.
+Этот проект представляет собой утилиту для генерации паролей. Он позволяет пользователям настраивать параметры паролей, такие как длина, использование строчных и заглавных букв, цифр и специальных символов, а также создавать настраиваемые пароли.
 
 ## Оглавление
 
@@ -9,143 +9,168 @@
 3. [Установка](#Установка)
 4. [Использование](#Использование)
 5. [Функции](#Функции)
-6. [Пример Использования](#Пример-Использования)
+6. [Пример использования](#Пример-использования)
 7. [Лицензия](#Лицензия)
 
 ## Описание
 
 Скрипт включает следующие функции:
 
-### Генерация и загрузка ключа для шифрования паролей (`get_encryption_key`)
-Создает новый ключ шифрования или загружает существующий из файла secret.key. Если файл или ключ неверной длины отсутствует, создается новый ключ и сохраняется в файл.
+### Генерация произвольного пароля (`generate_password`)
+Создает произвольный пароль, состоящий из букв (заглавных и строчных), цифр и специальных символов.
 
-### Определение параметров пароля (`define_password_parameters`)
-Пользователь задает параметры пароля:
-- Длина пароля (не менее 8 символов)
-- Использование специальных символов
-- Исключение неоднозначных символов
-- Произносимость пароля
-- Исключение повторяющихся символов
+### Генерация числового пароля (`generate_numeric_password`)
+Создает пароль, состоящий только из цифр.
 
-### Генерация пароля (`generate_password`)
-Создает пароль на основе заданных параметров. Поддерживает создание произносимых паролей и исключение повторяющихся символов.
+### Генерация буквенного пароля (`generate_alphabetic_password`)
+Создает пароль, состоящий только из букв (заглавных и строчных).
 
-### Проверка пароля (`verify_password`)
-Убеждается, что длина пароля составляет не менее 8 символов.
+### Генерация пароля из строчных букв (`generate_lowercase_password`)
+Создает пароль, состоящий только из строчных букв.
 
-### Сохранение пароля (`save_password`)
-Шифрует и сохраняет пароль в файл passwords.enc.
+### Генерация пароля из заглавных букв (`generate_uppercase_password`)
+Создает пароль, состоящий только из заглавных букв.
 
-### Возвращение результата пользователю (`return_password_to_user`)
-Возвращает сгенерированный пароль пользователю с приветственным сообщением.
+### Генерация буквенно-цифрового пароля (`generate_alphanumeric_password`)
+Создает пароль, состоящий из букв (заглавных и строчных) и цифр.
+
+### Генерация пароля из специальных символов (`generate_special_characters_password`)
+Создает пароль, состоящий только из специальных символов.
+
+### Генерация настраиваемого пароля (`generate_custom_password`)
+Позволяет пользователю выбрать, какие типы символов будут использоваться: строчные и заглавные буквы, цифры и специальные символы.
 
 ## Требования
 
 - Python 3.x
-- Библиотека cryptography
 
 ## Установка
 
-Установите необходимые библиотеки:
-```pip install cryptography```
+Для использования данного скрипта требуется Python версии 3.x.
+
+1. Скачайте и распакуйте проект на свой компьютер.
+2. Откройте терминал или командную строку и перейдите в директорию проекта.
+3. Запустите программу командой:
+    ```bash
+    python password_generator.py
+    ```
+
 ## Использование
 
-1. Запустите скрипт:
-```python password_generator.py```
-3. Следуйте инструкциям для определения параметров пароля и генерации нового пароля.
+После запуска программы пользователю будет предложено выбрать тип пароля и задать его длину. Пользователь может выбрать один из следующих типов паролей:
+
+1. Произвольный пароль
+2. Числовой пароль
+3. Буквенный пароль
+4. Пароль из строчных букв
+5. Пароль из заглавных букв
+6. Буквенно-цифровой пароль
+7. Пароль из специальных символов
+8. Настраиваемый пароль
+
+Для выбора пользователю необходимо ввести соответствующий номер и нажать Enter. Далее будет предложено ввести длину пароля.
+
+В случае выбора настраиваемого пароля пользователь также сможет указать, использовать ли строчные буквы, заглавные буквы, цифры и специальные символы.
 
 ## Функции
 
-### Генерация и загрузка ключа для шифрования паролей
+### Генерация произвольного пароля
 
-Функция `get_encryption_key` генерирует новый ключ для шифрования паролей или загружает существующий из файла `secret.key`. Если файл не найден или ключ неправильной длины, создается новый ключ.
+Функция `generate_password` генерирует пароль, состоящий из букв (заглавных и строчных), цифр и специальных символов.
 
 ```python
-def get_encryption_key():
-    try:
-        with open("secret.key", "rb") as key_file:
-            key = key_file.read()
-            if len(key) != 44:
-                raise ValueError("Ключ неверной длины")
-    except (FileNotFoundError, ValueError):
-        key = Fernet.generate_key()
-        with open("secret.key", "wb") as key_file:
-            key_file.write(key)
-    return key
+def generate_password(self, length):
+    characters = string.ascii_letters + string.digits + self.special_characters
+    password = ''.join(random.choice(characters) for _ in range(length))
+    return password
 ```
 
-### Определение параметров пароля
+### Генерация числового пароля
 
-Функция `define_password_parameters` запрашивает у пользователя параметры для генерации пароля.
+Функция `generate_numeric_password` генерирует пароль, состоящий только из цифр.
 
 ```python
-def define_password_parameters():
-    while True:
-        length = int(input('Введите длину пароля (не менее 8 символов): '))
-        if length < 8:
-            print("Ошибка: Длина пароля должна быть не менее 8 символов.")
-        else:
-            break
-    use_special_chars = input('Использовать специальные символы? (да/нет): ').lower() == 'да'
-    exclude_ambiguous = input('Исключить неоднозначные символы? (да/нет): ').lower() == 'да'
-    pronounceable = input('Сделать пароль произносимым? (да/нет): ').lower() == 'да'
-    avoid_repeated_chars = input('Исключить повторяющиеся символы? (да/нет): ').lower() == 'да'
+def generate_numeric_password(self, length):
+    characters = string.digits
+    password = ''.join(random.choice(characters) for _ in range(length))
+    return password
+```
+
+### Генерация буквенного пароля
+
+Функция `generate_alphabetic_password` генерирует пароль, состоящий только из букв (заглавных и строчных).
+
+```python
+def generate_alphabetic_password(self, length):
+    characters = string.ascii_letters
+    password = ''.join(random.choice(characters) for _ in range(length))
+    return password
+```
+
+### Генерация пароля из строчных букв
+
+Функция `generate_lowercase_password` генерирует пароль, состоящий только из строчных букв.
+
+```python
+def generate_lowercase_password(self, length):
+    characters = string.ascii_lowercase
+    password = ''.join(random.choice(characters) for _ in range(length))
+    return password
+```
+
+### Генерация пароля из заглавных букв
+
+Функция `generate_uppercase_password` генерирует пароль, состоящий только из заглавных букв.
+
+```python
+def generate_uppercase_password(self, length):
+    characters = string.ascii_uppercase
+    password = ''.join(random.choice(characters) for _ in range(length))
+    return password
+```
+
+### Генерация буквенно-цифрового пароля
+
+Функция `generate_alphanumeric_password` генерирует пароль, состоящий из букв (заглавных и строчных) и цифр.
+
+```python
+def generate_alphanumeric_password(self, length):
     characters = string.ascii_letters + string.digits
-    if use_special_chars:
-        characters += string.punctuation
-    if exclude_ambiguous:
-        characters = characters.replace('0', '').replace('O', '').replace('l', '').replace('I', '')
-    return length, characters, pronounceable, avoid_repeated_chars
+    password = ''.join(random.choice(characters) for _ in range(length))
+    return password
 ```
 
-### Генерация пароля
+### Генерация пароля из специальных символов
 
-Функция `generate_password` создает пароль на основе заданных параметров.
+Функция `generate_special_characters_password` генерирует пароль, состоящий только из специальных символов.
 
 ```python
-def generate_password(length, characters, pronounceable=False, avoid_repeated_chars=False):
-    password = []
-    if pronounceable:
-        vowels, consonants = "aeiou", ''.join(set(characters) - set("aeiou"))
-        while len(password) < length:
-            password.extend([random.choice(consonants), random.choice(vowels)])
-            if len(password) > length:
-                password = password[:length]
-    else:
-        while len(password) < length:
-            new_char = random.choice(characters)
-            if not (avoid_repeated_chars and password and password[-1] == new_char):
-                password.append(new_char)
-    return ''.join(password)
+def generate_special_characters_password(self, length):
+    password = ''.join(random.choice(self.special_characters) for _ in range(length))
+    return password
 ```
 
-### Проверка пароля
+### Генерация настраиваемого пароля
 
-Функция `verify_password` проверяет, что длина пароля составляет не менее 8 символов.
-
-```python
-def verify_password(password):
-    return len(password) >= 8
-```
-
-### Сохранение пароля
-
-Функция `save_password` шифрует и сохраняет пароль в файл `passwords.enc`.
+Функция `generate_custom_password` позволяет пользователю выбрать, какие типы символов будут использоваться для генерации пароля.
 
 ```python
-def save_password(password, filename, key):
-    fernet = Fernet(key)
-    with open(filename, "ab") as file:
-        file.write(fernet.encrypt(password.encode()) + b'\n')
-```
+def generate_custom_password(self, length, use_lowercase, use_uppercase, use_digits, use_special):
+    characters = ''
+    if use_lowercase:
+        characters += string.ascii_lowercase
+    if use_uppercase:
+        characters += string.ascii_uppercase
+    if use_digits:
+        characters += string.digits
+    if use_special:
+        characters += self.special_characters
 
-### Возвращение результата пользователю
+    if not characters:
+        raise ValueError("At least one type of character must be selected")
 
-Функция `return_password_to_user` возвращает сгенерированный пароль пользователю.
-
-```python
-def return_password_to_user(num, password):
-    return f"Hello, {num}, your password is: {password}"
+    password = ''.join(random.choice(characters) for _ in range(length))
+    return password
 ```
 
 ## Пример использования
@@ -153,17 +178,23 @@ def return_password_to_user(num, password):
 Пример сессии генерации пароля:
 
 ```plaintext
-login: user123
-Введите длину пароля (не менее 8 символов): 12
-Использовать специальные символы? (да/нет): да
-Исключить неоднозначные символы? (да/нет): да
-Сделать пароль произносимым? (да/нет): нет
-Исключить повторяющиеся символы? (да/нет): да
+Выберите тип пароля:
+1. Произвольный пароль
+2. Числовой пароль
+3. Буквенный пароль
+4. Пароль из строчных букв
+5. Пароль из заглавных букв
+6. Буквенно-цифровой пароль
+7. Пароль из специальных символов
+8. Настраиваемый пароль
+0. Выход
+Ваш выбор: 1
+Введите длину пароля: 12
+Пароль: Ab1!Cd2@Ef3#
 ```
 
-Скрипт сгенерирует пароль, проверит его и сохранит в зашифрованном виде в файл `passwords.enc`.
+Скрипт сгенерирует пароль на основе выбранных параметров и выведет его на экран.
 
 ## Лицензия
 
 Этот проект лицензирован на условиях MIT License.
-
